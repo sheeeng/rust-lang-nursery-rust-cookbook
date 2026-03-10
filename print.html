@@ -467,9 +467,9 @@ Keep lines sorted.
 </div>
 <h2 id="media-types-mime"><a class="header" href="#media-types-mime">Media Types (MIME)</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Recipe</th><th>Crates</th><th>Categories</th></tr></thead><tbody>
-<tr><td><a href="web/mime.html#get-mime-type-from-string">Get MIME type from string</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a></td><td><a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
-<tr><td><a href="web/mime.html#get-mime-type-from-filename">Get MIME type from filename</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a></td><td><a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
-<tr><td><a href="web/mime.html#parse-the-mime-type-of-a-http-response">Parse the MIME type of a HTTP response</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a> <a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
+<tr><td><a href="web/mime.html#get-mime-type-from-string">Get MIME type from string</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a></td><td><a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
+<tr><td><a href="web/mime.html#get-mime-type-from-filename">Get MIME type from filename</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a></td><td><a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
+<tr><td><a href="web/mime.html#parse-the-mime-type-of-a-http-response">Parse the MIME type of a HTTP response</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a> <a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
 </tbody></table>
 </div>
 <h2 id="clients"><a class="header" href="#clients">Clients</a></h2>
@@ -540,12 +540,12 @@ that they may be copied directly into your own projects for
 experimentation. To do so follow the instructions below.</p>
 <p>Consider this example for "generate random numbers within a range":</p>
 <p><a href="https://docs.rs/rand/"><img src="https://img.shields.io/crates/v/rand.svg?label=rand" alt="rand-badge" /></a> <a href="https://crates.io/categories/science"><img src="https://img.shields.io/badge/science--x.svg?style=social" alt="cat-science-badge" /></a></p>
-<pre><pre class="playground"><code class="language-rust edition2018">use rand::Rng;
+<pre><pre class="playground"><code class="language-rust edition2018">use rand::RngExt;
 
 fn main() {
     let mut rng = rand::rng();
     let random_number: u32 = rng.random();
-    println!("Random number: {}", random_number);
+    println!("Random number: {random_number}");
 }</code></pre></pre>
 <p>To work with it locally we can run the following commands to create
 a new cargo project, and change to that directory:</p>
@@ -623,17 +623,28 @@ Keep lines sorted.
 <a href="https://docs.rs/rand/0.9/rand/fn.rng.html"><code>rand::rng()</code></a>. Each thread has an initialized generator. Integers are uniformly distributed over the
 range of the type, and floating point numbers are uniformly distributed from 0 up to but not
 including 1.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">use rand::Rng;
+<pre><pre class="playground"><code class="language-rust edition2018">use rand::RngExt;
 
 fn main() {
     let mut rng = rand::rng();
     let random_number: u32 = rng.random();
     println!("Random number: {random_number}");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_random_number() {
+        let mut rng = rand::rng();
+        let _: u32 = rng.random();
+    }
 }</code></pre></pre>
 <h2 id="generate-random-numbers-within-a-range"><a class="header" href="#generate-random-numbers-within-a-range">Generate random numbers within a range</a></h2>
 <p><a href="https://docs.rs/rand/"><img src="https://img.shields.io/crates/v/rand.svg?label=rand" alt="rand-badge" /></a> <a href="https://crates.io/categories/science"><img src="https://img.shields.io/badge/science--x.svg?style=social" alt="cat-science-badge" /></a></p>
 <p>Generates a random value within half-open <code>[0, 10)</code> range (not including <code>10</code>) with <a href="https://docs.rs/rand/0.9/rand/trait.Rng.html#method.random_range"><code>Rng::random_range</code></a>.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">use rand::Rng;
+<pre><pre class="playground"><code class="language-rust edition2018">use rand::RngExt;
 
 fn main() {
     let mut rng = rand::rng();
@@ -682,7 +693,7 @@ fn main() {
 <p>Randomly generates a tuple <code>(i32, bool, f64)</code> and variable of user defined type <code>Point</code>. Implements
 the <a href="https://docs.rs/rand/0.9/rand/distr/trait.Distribution.html"><code>Distribution</code></a> trait on type Point for <a href="https://docs.rs/rand/0.9/rand/distr/struct.StandardUniform.html"><code>StandardUniform</code></a> in order to allow random generation.</p>
 <pre><pre class="playground"><code class="language-rust edition2018">#![allow(dead_code)]
-use rand::Rng;
+use rand::{Rng, RngExt};
 
 #[derive(Debug)]
 struct Point {
@@ -710,7 +721,7 @@ fn main() {
 <p><a href="https://docs.rs/rand/"><img src="https://img.shields.io/crates/v/rand.svg?label=rand" alt="rand-badge" /></a> <a href="https://crates.io/categories/os"><img src="https://img.shields.io/badge/OS--x.svg?style=social" alt="cat-os-badge" /></a></p>
 <p>Randomly generates a string of given length ASCII characters in the range <code>A-Z, a-z, 0-9</code>, with
 <a href="https://docs.rs/rand/0.9/rand/distr/struct.Alphanumeric.html"><code>Alphanumeric</code></a> sample.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">use rand::{distr::Alphanumeric, Rng};
+<pre><pre class="playground"><code class="language-rust edition2018">use rand::{distr::Alphanumeric, RngExt};
 
 fn main() {
     let password = generate_password();
@@ -729,7 +740,7 @@ fn generate_password() -&gt; String {
 <p><a href="https://docs.rs/rand/"><img src="https://img.shields.io/crates/v/rand.svg?label=rand" alt="rand-badge" /></a> <a href="https://crates.io/categories/os"><img src="https://img.shields.io/badge/OS--x.svg?style=social" alt="cat-os-badge" /></a></p>
 <p>Randomly generates a string of given length ASCII characters with custom user-defined bytestring,
 with <a href="https://docs.rs/rand/0.9/rand/trait.Rng.html#method.random_range"><code>random_range</code></a>.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">use rand::Rng;
+<pre><pre class="playground"><code class="language-rust edition2018">use rand::RngExt;
 
 const CHARSET: &amp;[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ\
                         abcdefghijklmnopqrstuvwxyz\
@@ -769,11 +780,13 @@ the order of equal elements.</p>
 }</code></pre></pre>
 <h2 id="sort-a-vector-of-floats"><a class="header" href="#sort-a-vector-of-floats">Sort a Vector of Floats</a></h2>
 <p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge" /></a> <a href="https://crates.io/categories/science"><img src="https://img.shields.io/badge/science--x.svg?style=social" alt="cat-science-badge" /></a></p>
-<p>A Vector of f32 or f64 can be sorted with <a href="https://doc.rust-lang.org/std/primitive.slice.html#method.sort_by"><code>vec::sort_by</code></a> and <a href="https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html#tymethod.partial_cmp"><code>PartialOrd::partial_cmp</code></a>.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
-    let mut vec = vec![1.1, 1.15, 5.5, 1.123, 2.0];
+<p>A Vector of f32 or f64 can be sorted with <a href="https://doc.rust-lang.org/std/primitive.slice.html#method.sort_by"><code>vec::sort_by</code></a> and <a href="https://doc.rust-lang.org/std/primitive.f64.html#method.total_cmp"><code>f64::total_cmp</code></a>.
+Unlike <a href="https://doc.rust-lang.org/std/cmp/trait.PartialOrd.html#tymethod.partial_cmp"><code>PartialOrd::partial_cmp</code></a>, <a href="https://doc.rust-lang.org/std/primitive.f64.html#method.total_cmp"><code>total_cmp</code></a> handles NaN values without panicking
+by placing them at the end of the sort order.</p>
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
+    let mut vec = vec![1.1_f64, 1.15, 5.5, 1.123, 2.0];
 
-    vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    vec.sort_by(|a, b| a.total_cmp(b));
 
     assert_eq!(vec, vec![1.1, 1.123, 1.15, 2.0, 5.5]);
 }</code></pre></pre>
@@ -1094,13 +1107,12 @@ Keep lines sorted.
 <!-- Crates -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="threads"><a class="header" href="#threads">Threads</a></h1>
 <h2 id="spawn-a-short-lived-thread"><a class="header" href="#spawn-a-short-lived-thread">Spawn a short-lived thread</a></h2>
-<p><a href="https://docs.rs/crossbeam/"><img src="https://img.shields.io/crates/v/crossbeam.svg?label=crossbeam" alt="crossbeam-badge" /></a> <a href="https://crates.io/categories/concurrency"><img src="https://img.shields.io/badge/concurrency--x.svg?style=social" alt="cat-concurrency-badge" /></a></p>
-<p>The example uses the <a href="https://docs.rs/crossbeam/">crossbeam</a> crate, which provides data structures and functions
-for concurrent and parallel programming. <a href="https://docs.rs/crossbeam/*/crossbeam/thread/struct.Scope.html#method.spawn"><code>Scope::spawn</code></a> spawns a new scoped thread that is guaranteed
-to terminate before returning from the closure that passed into <a href="https://docs.rs/crossbeam/*/crossbeam/fn.scope.html"><code>crossbeam::scope</code></a> function, meaning that
-you can reference data from the calling function.</p>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge" /></a> <a href="https://crates.io/categories/concurrency"><img src="https://img.shields.io/badge/concurrency--x.svg?style=social" alt="cat-concurrency-badge" /></a></p>
+<p><a href="https://doc.rust-lang.org/std/thread/fn.scope.html"><code>std::thread::scope</code></a> spawns a new scoped thread that is guaranteed
+to terminate before returning from the closure, meaning that
+you can reference data from the calling function without needing <code>Arc</code> or other ownership tricks.</p>
 <p>This example splits the array in half and performs the work in separate threads.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">fn main() {
+<pre><pre class="playground"><code class="language-rust edition2021">fn main() {
     let arr = &amp;[1, 25, -4, 10];
     let max = find_max(arr);
     assert_eq!(max, Some(25));
@@ -1108,23 +1120,23 @@ you can reference data from the calling function.</p>
 
 fn find_max(arr: &amp;[i32]) -&gt; Option&lt;i32&gt; {
     const THRESHOLD: usize = 2;
-  
+
     if arr.len() &lt;= THRESHOLD {
         return arr.iter().cloned().max();
     }
 
     let mid = arr.len() / 2;
     let (left, right) = arr.split_at(mid);
-  
-    crossbeam::scope(|s| {
-        let thread_l = s.spawn(|_| find_max(left));
-        let thread_r = s.spawn(|_| find_max(right));
-  
+
+    std::thread::scope(|s| {
+        let thread_l = s.spawn(|| find_max(left));
+        let thread_r = s.spawn(|| find_max(right));
+
         let max_l = thread_l.join().unwrap()?;
         let max_r = thread_r.join().unwrap()?;
-  
+
         Some(max_l.max(max_r))
-    }).unwrap()
+    })
 }</code></pre></pre>
 <h2 id="create-a-parallel-pipeline"><a class="header" href="#create-a-parallel-pipeline">Create a parallel pipeline</a></h2>
 <p><a href="https://docs.rs/crossbeam/"><img src="https://img.shields.io/crates/v/crossbeam.svg?label=crossbeam" alt="crossbeam-badge" /></a> <a href="https://crates.io/categories/concurrency"><img src="https://img.shields.io/badge/concurrency--x.svg?style=social" alt="cat-concurrency-badge" /></a></p>
@@ -1482,12 +1494,12 @@ fn main() {
 values in parallel.  Although <a href="https://docs.rs/rayon/*/rayon/slice/trait.ParallelSliceMut.html">multiple options</a>
 exist to sort an enumerable data type, <a href="https://docs.rs/rayon/*/rayon/slice/trait.ParallelSliceMut.html#method.par_sort_unstable"><code>par_sort_unstable</code></a>
 is usually faster than <a href="https://docs.rs/rayon/*/rayon/slice/trait.ParallelSliceMut.html#method.par_sort">stable sorting</a> algorithms.</p>
-<pre><pre class="playground"><code class="language-rust edition2018">use rand::Rng;
+<pre><pre class="playground"><code class="language-rust edition2018">use rand::RngExt;
 use rayon::prelude::*;
 
 fn main() {
     let mut vec = vec![0; 1_000_000];
-    rand::thread_rng().fill(&amp;mut vec[..]);
+    rand::rng().fill(&amp;mut vec[..]);
 
     vec.par_sort_unstable();
 
@@ -5136,9 +5148,9 @@ Keep lines sorted.
 </div>
 <h2 id="media-types-mime-1"><a class="header" href="#media-types-mime-1">Media Types (MIME)</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Recipe</th><th>Crates</th><th>Categories</th></tr></thead><tbody>
-<tr><td><a href="web/mime.html#get-mime-type-from-string">Get MIME type from string</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a></td><td><a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
-<tr><td><a href="web/mime.html#get-mime-type-from-filename">Get MIME type from filename</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a></td><td><a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
-<tr><td><a href="web/mime.html#parse-the-mime-type-of-a-http-response">Parse the MIME type of a HTTP response</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a> <a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
+<tr><td><a href="web/mime.html#get-mime-type-from-string">Get MIME type from string</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a></td><td><a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
+<tr><td><a href="web/mime.html#get-mime-type-from-filename">Get MIME type from filename</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a></td><td><a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
+<tr><td><a href="web/mime.html#parse-the-mime-type-of-a-http-response">Parse the MIME type of a HTTP response</a></td><td><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a> <a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></td></tr>
 </tbody></table>
 </div>
 <h2 id="clients-1"><a class="header" href="#clients-1">Clients</a></h2>
@@ -5500,7 +5512,7 @@ Keep lines sorted.
 <!-- Crates -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="media-types"><a class="header" href="#media-types">Media Types</a></h1>
 <h2 id="get-mime-type-from-string"><a class="header" href="#get-mime-type-from-string">Get MIME type from string</a></h2>
-<p><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></p>
+<p><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></p>
 <p>The following example shows how to parse a <a href="https://docs.rs/mime/*/mime/struct.Mime.html"><code>MIME</code></a> type from a string using the
 <a href="https://docs.rs/mime/">mime</a> crate. <a href="https://docs.rs/mime/*/mime/struct.FromStrError.html"><code>FromStrError</code></a> produces a default <a href="https://docs.rs/mime/*/mime/struct.Mime.html"><code>MIME</code></a> type in an
 <code>unwrap_or</code> clause.</p>
@@ -5528,7 +5540,7 @@ fn main() {
     );
 }</code></pre></pre>
 <h2 id="get-mime-type-from-filename"><a class="header" href="#get-mime-type-from-filename">Get MIME type from filename</a></h2>
-<p><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></p>
+<p><a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></p>
 <p>The following example shows how to return the correct MIME type from a given
 filename using the <a href="https://docs.rs/mime/">mime</a> crate.  The program will check for file extensions
 and match against a known list.  The return value is <a href="https://docs.rs/mime/*/mime/struct.Mime.html"><code>mime:Mime</code></a>.</p>
@@ -5560,7 +5572,7 @@ fn main() {
 
 }</code></pre></pre>
 <h2 id="parse-the-mime-type-of-a-http-response"><a class="header" href="#parse-the-mime-type-of-a-http-response">Parse the MIME type of a HTTP response</a></h2>
-<p><a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a> <a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/csv.svg?label=mime" alt="mime-badge" /></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></p>
+<p><a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a> <a href="https://docs.rs/mime/"><img src="https://img.shields.io/crates/v/mime.svg?label=mime" alt="mime-badge" /></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a> <a href="https://crates.io/categories/encoding"><img src="https://img.shields.io/badge/encoding--x.svg?style=social" alt="cat-encoding-badge" /></a></p>
 <p>When receiving a HTTP reponse from <code>reqwest</code> the <a href="https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/MIME_types">MIME type</a> or media type may be
 found in the <a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Type">Content-Type</a> header. <a href="https://docs.rs/reqwest/*/reqwest/header/struct.HeaderMap.html#method.get"><code>reqwest::header::HeaderMap::get</code></a> retrieves
 the header as a <a href="https://docs.rs/reqwest/*/reqwest/header/struct.HeaderValue.html"><code>reqwest::header::HeaderValue</code></a>, which can be converted to a
@@ -6027,7 +6039,7 @@ Keep lines sorted.
 [log]: https://docs.rs/log/
 [memmap-badge]: https://img.shields.io/crates/v/memmap.svg?label=memmap
 [memmap]: https://docs.rs/memmap/
-[mime-badge]: https://img.shields.io/crates/v/csv.svg?label=mime
+[mime-badge]: https://img.shields.io/crates/v/mime.svg?label=mime
 [mime]: https://docs.rs/mime/
 [nalgebra-badge]: https://img.shields.io/crate/nalgebra.svg?label=nalgebra
 [nalgebra]: https://docs.rs/nalgebra
@@ -6223,9 +6235,6 @@ fn main() -&gt; Result&lt;()&gt; {
     std::io::copy(&amp;mut response, &amp;mut output_file)?;
   }
     
-  let content = response.text()?;
-  std::io::copy(&amp;mut content.as_bytes(), &amp;mut output_file)?;
-
   println!("Finished with success!");
   Ok(())
 }</code></pre></pre>

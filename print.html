@@ -491,6 +491,12 @@ Keep lines sorted.
 <div class="table-wrapper"><table><thead><tr><th>Recipe</th><th>Crates</th><th>Categories</th></tr></thead><tbody>
 <tr><td><a href="web/clients/authentication.html#basic-authentication">Basic Authentication</a></td><td><a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a></td></tr>
 </tbody></table>
+</div>
+<h2 id="full-stack-web"><a class="header" href="#full-stack-web">Full Stack Web</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Recipe</th><th>Crates</th><th>Categories</th></tr></thead><tbody>
+<tr><td><a href="web/leptos.html#return-filtered-results-as-html">Return filtered results as HTML</a></td><td><a href="https://docs.rs/leptos/"><img src="https://img.shields.io/crates/v/leptos.svg?label=leptos" alt="leptos-badge" /></a> <a href="https://docs.rs/leptos_router/"><img src="https://img.shields.io/crates/v/leptos_router.svg?label=leptos_router" alt="leptos-router-badge" /></a> <a href="https://docs.rs/leptos_axum/"><img src="https://img.shields.io/crates/v/leptos_axum.svg?label=leptos_axum" alt="leptos-axum-badge" /></a> <a href="https://docs.rs/axum/"><img src="https://img.shields.io/crates/v/axum.svg?label=axum" alt="axum-badge" /></a> <a href="https://docs.rs/tokio/"><img src="https://img.shields.io/crates/v/tokio.svg?label=tokio" alt="tokio-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a></td></tr>
+<tr><td><a href="web/leptos.html#synchronize-component-state-with-the-server">Synchronize component state with the server</a></td><td><a href="https://docs.rs/leptos/"><img src="https://img.shields.io/crates/v/leptos.svg?label=leptos" alt="leptos-badge" /></a> <a href="https://docs.rs/leptos_axum/"><img src="https://img.shields.io/crates/v/leptos_axum.svg?label=leptos_axum" alt="leptos-axum-badge" /></a> <a href="https://docs.rs/axum/"><img src="https://img.shields.io/crates/v/axum.svg?label=axum" alt="axum-badge" /></a> <a href="https://docs.rs/tokio/"><img src="https://img.shields.io/crates/v/tokio.svg?label=tokio" alt="tokio-badge" /></a> <a href="https://docs.rs/wasm-bindgen/"><img src="https://img.shields.io/crates/v/wasm-bindgen.svg?label=wasm-bindgen" alt="wasm-bindgen-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a></td></tr>
+</tbody></table>
 </div><!--
 Links, in a few categories. Follow the existing structure.
 Keep lines sorted.
@@ -1625,7 +1631,18 @@ data and runs inside a single spawned task. A clonable <strong>handle</strong> h
 command the actor can process.</p>
 <p>Because only one task ever accesses the data, there is no locking. Request–response
 pairs use a <a href="https://docs.rs/tokio/latest/tokio/sync/oneshot/index.html"><code>oneshot</code></a> channel embedded in the message variant.</p>
-<pre><pre class="playground"><code class="language-rust edition2021">use tokio::sync::{mpsc, oneshot};
+<pre><pre class="playground"><code class="language-rust edition2021">use thiserror::Error;
+use tokio::sync::{mpsc, oneshot};
+
+#[derive(Debug, Error)]
+enum ActorError {
+    #[error("failed to send message to actor")]
+    Send(#[from] mpsc::error::SendError&lt;Message&gt;),
+    #[error("actor dropped response channel")]
+    Recv(#[from] oneshot::error::RecvError),
+    #[error("task failed")]
+    Join(#[from] tokio::task::JoinError),
+}
 
 // The Message enum represents commands sent to the actor.
 enum Message {
@@ -1721,7 +1738,7 @@ impl DriverHandle {
         driver_id: u32,
         lat: f64,
         lng: f64,
-    ) -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    ) -&gt; Result&lt;(), ActorError&gt; {
         self.sender
             .send(Message::UpdateLocation {
                 driver_id,
@@ -1735,7 +1752,7 @@ impl DriverHandle {
     async fn get_driver_status(
         &amp;self,
         driver_id: u32,
-    ) -&gt; Result&lt;Option&lt;DriverStatus&gt;, Box&lt;dyn std::error::Error&gt;&gt; {
+    ) -&gt; Result&lt;Option&lt;DriverStatus&gt;, ActorError&gt; {
         let (tx, rx) = oneshot::channel();
         self.sender
             .send(Message::GetDriverStatus {
@@ -1748,7 +1765,7 @@ impl DriverHandle {
 }
 
 #[tokio::main]
-async fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+async fn main() -&gt; Result&lt;(), ActorError&gt; {
     let handle = DriverHandle::new();
 
     // Multiple clones can be sent to different tasks.
@@ -1756,25 +1773,29 @@ async fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
     let h2 = handle.clone();
 
     let task1 = tokio::spawn(async move {
-        h1.update_location(1, 40.7128, -74.0060).await.unwrap();
-        h1.update_location(1, 40.7130, -74.0062).await.unwrap();
+        h1.update_location(1, 40.7128, -74.0060).await?;
+        h1.update_location(1, 40.7130, -74.0062).await?;
+        Ok::&lt;(), ActorError&gt;(())
     });
 
     let task2 = tokio::spawn(async move {
-        h2.update_location(2, 34.0522, -118.2437).await.unwrap();
+        h2.update_location(2, 34.0522, -118.2437).await?;
+        Ok::&lt;(), ActorError&gt;(())
     });
 
-    task1.await?;
-    task2.await?;
+    task1.await??;
+    task2.await??;
 
-    let status = handle.get_driver_status(1).await?;
-    println!("Driver 1: {:?}", status);
+    if let Some(s) = handle.get_driver_status(1).await? {
+        println!("Driver {}: ({}, {}), updates: {}", s.driver_id, s.lat, s.lng, s.update_count);
+    }
 
-    let status = handle.get_driver_status(2).await?;
-    println!("Driver 2: {:?}", status);
+    if let Some(s) = handle.get_driver_status(2).await? {
+        println!("Driver {}: ({}, {}), updates: {}", s.driver_id, s.lat, s.lng, s.update_count);
+    }
 
-    let status = handle.get_driver_status(99).await?;
-    println!("Driver 99: {:?}", status);
+    let missing = handle.get_driver_status(99).await?;
+    println!("Driver 99: {:?}", missing);
 
     Ok(())
 }</code></pre></pre>
@@ -1791,12 +1812,13 @@ Keep lines sorted.
 or a zero-allocation protocol parser—you can implement <a href="https://doc.rust-lang.org/std/future/trait.Future.html"><code>Future</code></a> by hand
 instead of relying on <code>async</code>/<code>await</code>.</p>
 <p>Every custom future must handle three concepts:</p>
+<div class="comparison">
 <div class="table-wrapper"><table><thead><tr><th>Concept</th><th>Why it matters</th></tr></thead><tbody>
 <tr><td><strong><a href="https://doc.rust-lang.org/std/pin/struct.Pin.html"><code>Pin&lt;&amp;mut Self&gt;</code></a></strong></td><td>Guarantees the future won't move in memory after the first poll. This is critical for self-referential futures (e.g., those holding borrows across <code>.await</code> points). If your struct contains only ordinary fields (no self-references), the compiler auto-implements <code>Unpin</code> and pinning is effectively a no-op.</td></tr>
 <tr><td><strong><a href="https://doc.rust-lang.org/std/task/enum.Poll.html#variant.Pending"><code>Poll::Pending</code></a> / <a href="https://doc.rust-lang.org/std/task/enum.Poll.html#variant.Ready"><code>Poll::Ready</code></a></strong></td><td><code>Pending</code> tells the executor "not done yet," while <code>Ready(value)</code> completes the future.</td></tr>
 <tr><td><strong><a href="https://doc.rust-lang.org/std/task/struct.Context.html#method.waker"><code>cx.waker()</code></a></strong></td><td>A handle the executor gives you. You <em>must</em> call <code>wake()</code> at some point after returning <code>Pending</code>, or the executor will never poll the future again and it will hang.</td></tr>
 </tbody></table>
-</div>
+</div></div>
 <p>The example below builds a simple <code>Delay</code> future that resolves after a
 deadline.  It has no self-referential fields, so it is <code>Unpin</code> automatically—
 pinning costs nothing.  A production timer would register with a reactor;
@@ -5142,13 +5164,14 @@ Keep lines sorted.
 <p>The <a href="https://docs.rs/no-panic"><code>#[no_panic]</code></a> attribute macro makes the <strong>compiler prove</strong> at
 link time that a function can never reach a panicking code path.  If it can't
 prove it, the build fails.</p>
+<div class="comparison">
 <div class="table-wrapper"><table><thead><tr><th>Panicking pattern</th><th>Safe alternative</th></tr></thead><tbody>
 <tr><td><code>slice[i]</code></td><td><code>slice.get(i)</code> with exhaustive <code>match</code></td></tr>
 <tr><td><code>for i in 0..len { slice[i] }</code></td><td><code>for &amp;v in slice</code> (iterator)</td></tr>
 <tr><td><code>value.unwrap()</code></td><td><code>match</code> / <code>if let</code> / <code>?</code></td></tr>
 <tr><td><code>a / b</code> (integer, <code>b</code> might be 0)</td><td>Check <code>b</code> before dividing</td></tr>
 </tbody></table>
-</div>
+</div></div>
 <p>The example below shows three panic-free functions—aggregation, lookup, and
 sensor normalization—each proven at compile time by <code>#[no_panic]</code>.</p>
 <pre><pre class="playground"><code class="language-rust edition2018">use no_panic::no_panic;
@@ -5231,17 +5254,29 @@ firmware risks fragmentation and silent OOM failures.</p>
 on the <strong>stack</strong> (or in a <code>static</code>) with a capacity fixed at compile time.
 Pushing beyond capacity returns <code>Err</code> instead of panicking or allocating,
 letting the caller decide how to handle it.</p>
+<div class="comparison">
 <div class="table-wrapper"><table><thead><tr><th><code>std</code> type</th><th><code>heapless</code> equivalent</th><th>Guarantee</th></tr></thead><tbody>
 <tr><td><code>Vec&lt;T&gt;</code></td><td><code>heapless::Vec&lt;T, N&gt;</code></td><td>At most <code>N</code> elements, no allocator</td></tr>
 <tr><td><code>String</code></td><td><code>heapless::String&lt;N&gt;</code></td><td>At most <code>N</code> bytes, no allocator</td></tr>
 <tr><td><code>VecDeque&lt;T&gt;</code></td><td><code>heapless::Deque&lt;T, N&gt;</code></td><td>Fixed-capacity ring buffer</td></tr>
 <tr><td><code>HashMap&lt;K,V&gt;</code></td><td><code>heapless::IndexMap&lt;K,V,S,N&gt;</code></td><td>Fixed-capacity hash map</td></tr>
 </tbody></table>
-</div>
+</div></div>
 <p>The example below builds a stack-allocated event log and demonstrates
 capacity enforcement—the kind of predictable, constant-memory behavior
 required by embedded and real-time systems.</p>
 <pre><pre class="playground"><code class="language-rust edition2018">use heapless::{String, Vec};
+use thiserror::Error;
+
+#[derive(Debug, Error)]
+enum LogError {
+    #[error("log full (capacity exceeded)")]
+    Full,
+    #[error("log is empty")]
+    Empty,
+    #[error(transparent)]
+    Fmt(#[from] core::fmt::Error),
+}
 
 /// A fixed-capacity event log that never touches the heap.
 ///
@@ -5272,9 +5307,9 @@ impl&lt;const N: usize&gt; EventLog&lt;N&gt; {
 
     /// Records an event.  Returns `Err` if the log is full instead
     /// of panicking or allocating—the caller decides what to do.
-    fn record(&amp;mut self, timestamp_ms: u32, code: u16) -&gt; Result&lt;(), Event&gt; {
+    fn record(&amp;mut self, timestamp_ms: u32, code: u16) -&gt; Result&lt;(), LogError&gt; {
         let event = Event { timestamp_ms, code };
-        self.entries.push(event).map_err(|e| e)
+        self.entries.push(event).map_err(|_| LogError::Full)
     }
 
     /// Returns how many events have been recorded.
@@ -5283,8 +5318,8 @@ impl&lt;const N: usize&gt; EventLog&lt;N&gt; {
     }
 
     /// Returns the most recent event, if any.
-    fn latest(&amp;self) -&gt; Option&lt;&amp;Event&gt; {
-        self.entries.last()
+    fn latest(&amp;self) -&gt; Result&lt;&amp;Event, LogError&gt; {
+        self.entries.last().ok_or(LogError::Empty)
     }
 }
 
@@ -5293,37 +5328,41 @@ impl&lt;const N: usize&gt; EventLog&lt;N&gt; {
 /// [`heapless::String&lt;N&gt;`] works like `std::string::String` but
 /// stores up to `N` bytes on the stack.  `write!` returns `Err` if
 /// the formatted text would exceed capacity.
-fn format_label(sensor_id: u16, value: f32) -&gt; Result&lt;String&lt;32&gt;, core::fmt::Error&gt; {
+fn format_label(sensor_id: u16, value: f32) -&gt; Result&lt;String&lt;32&gt;, LogError&gt; {
     use core::fmt::Write;
     let mut buf: String&lt;32&gt; = String::new();
     write!(buf, "S{sensor_id}={value:.1}")?;
     Ok(buf)
 }
 
-fn main() {
+fn main() -&gt; Result&lt;(), LogError&gt; {
     // A log that holds at most 8 events — zero heap allocation.
     let mut log: EventLog&lt;8&gt; = EventLog::new();
 
-    log.record(100, 0x01).expect("log not full");
-    log.record(200, 0x02).expect("log not full");
-    log.record(300, 0xFF).expect("log not full");
+    log.record(100, 0x01)?;
+    log.record(200, 0x02)?;
+    log.record(300, 0xFF)?;
 
     println!("logged {} events", log.len());
-    println!("latest: {:?}", log.latest().unwrap());
+    let latest = log.latest()?;
+    println!(
+        "latest: timestamp={}ms code=0x{:02X}",
+        latest.timestamp_ms, latest.code
+    );
 
     // Stack-allocated string formatting.
-    let label = format_label(42, 3.14).expect("fits in 32 bytes");
+    let label = format_label(42, 3.14)?;
     println!("label: {label}");
 
     // Demonstrate capacity enforcement — the 9th push returns Err.
     let mut full_log: EventLog&lt;2&gt; = EventLog::new();
-    full_log.record(0, 1).unwrap();
-    full_log.record(1, 2).unwrap();
-    let overflow = full_log.record(2, 3);
-    assert!(overflow.is_err());
+    full_log.record(0, 1)?;
+    full_log.record(1, 2)?;
+    assert!(full_log.record(2, 3).is_err());
     println!("overflow correctly rejected");
-}
-</code></pre></pre>
+
+    Ok(())
+}</code></pre></pre>
 <!--
 Links, in a few categories. Follow the existing structure.
 Keep lines sorted.
@@ -5644,6 +5683,12 @@ Keep lines sorted.
 <h2 id="web-authentication-1"><a class="header" href="#web-authentication-1">Web Authentication</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Recipe</th><th>Crates</th><th>Categories</th></tr></thead><tbody>
 <tr><td><a href="web/clients/authentication.html#basic-authentication">Basic Authentication</a></td><td><a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a></td></tr>
+</tbody></table>
+</div>
+<h2 id="full-stack-web-1"><a class="header" href="#full-stack-web-1">Full Stack Web</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Recipe</th><th>Crates</th><th>Categories</th></tr></thead><tbody>
+<tr><td><a href="web/leptos.html#return-filtered-results-as-html">Return filtered results as HTML</a></td><td><a href="https://docs.rs/leptos/"><img src="https://img.shields.io/crates/v/leptos.svg?label=leptos" alt="leptos-badge" /></a> <a href="https://docs.rs/leptos_router/"><img src="https://img.shields.io/crates/v/leptos_router.svg?label=leptos_router" alt="leptos-router-badge" /></a> <a href="https://docs.rs/leptos_axum/"><img src="https://img.shields.io/crates/v/leptos_axum.svg?label=leptos_axum" alt="leptos-axum-badge" /></a> <a href="https://docs.rs/axum/"><img src="https://img.shields.io/crates/v/axum.svg?label=axum" alt="axum-badge" /></a> <a href="https://docs.rs/tokio/"><img src="https://img.shields.io/crates/v/tokio.svg?label=tokio" alt="tokio-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a></td></tr>
+<tr><td><a href="web/leptos.html#synchronize-component-state-with-the-server">Synchronize component state with the server</a></td><td><a href="https://docs.rs/leptos/"><img src="https://img.shields.io/crates/v/leptos.svg?label=leptos" alt="leptos-badge" /></a> <a href="https://docs.rs/leptos_axum/"><img src="https://img.shields.io/crates/v/leptos_axum.svg?label=leptos_axum" alt="leptos-axum-badge" /></a> <a href="https://docs.rs/axum/"><img src="https://img.shields.io/crates/v/axum.svg?label=axum" alt="axum-badge" /></a> <a href="https://docs.rs/tokio/"><img src="https://img.shields.io/crates/v/tokio.svg?label=tokio" alt="tokio-badge" /></a> <a href="https://docs.rs/wasm-bindgen/"><img src="https://img.shields.io/crates/v/wasm-bindgen.svg?label=wasm-bindgen" alt="wasm-bindgen-badge" /></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a></td></tr>
 </tbody></table>
 </div><!--
 Links, in a few categories. Follow the existing structure.
@@ -6478,6 +6523,8 @@ Keep lines sorted.
 [ansi_term]: https://docs.rs/ansi_term/
 [anyhow-badge]: https://img.shields.io/crates/v/anyhow.svg?label=anyhow
 [anyhow]: https://docs.rs/anyhow/
+[axum-badge]: https://img.shields.io/crates/v/axum.svg?label=axum
+[axum]: https://docs.rs/axum/
 [base64-badge]: https://img.shields.io/crates/v/base64.svg?label=base64
 [base64]: https://docs.rs/base64/
 [bitflags-badge]: https://img.shields.io/crates/v/bitflags.svg?label=bitflags
@@ -6512,6 +6559,12 @@ Keep lines sorted.
 [image]: https://docs.rs/image/
 [lazy_static-badge]: https://img.shields.io/crates/v/lazy_static.svg?label=lazy_static
 [lazy_static]: https://docs.rs/lazy_static/
+[leptos-badge]: https://img.shields.io/crates/v/leptos.svg?label=leptos
+[leptos]: https://docs.rs/leptos/
+[leptos-axum-badge]: https://img.shields.io/crates/v/leptos_axum.svg?label=leptos_axum
+[leptos-axum]: https://docs.rs/leptos_axum/
+[leptos-router-badge]: https://img.shields.io/crates/v/leptos_router.svg?label=leptos_router
+[leptos-router]: https://docs.rs/leptos_router/
 [log-badge]: https://img.shields.io/crates/v/log.svg?label=log
 [log4rs-badge]: https://img.shields.io/crates/v/log4rs.svg?label=log4rs
 [log4rs]: https://docs.rs/log4rs/
@@ -6582,7 +6635,9 @@ Keep lines sorted.
 [unicode-segmentation-badge]: https://img.shields.io/crates/v/unicode-segmentation.svg?label=unicode-segmentation
 [unicode-segmentation]: https://docs.rs/unicode-segmentation/
 [walkdir-badge]: https://img.shields.io/crates/v/walkdir.svg?label=walkdir
-[walkdir]: https://docs.rs/walkdir/</code></pre></pre>
+[walkdir]: https://docs.rs/walkdir/
+[wasm-bindgen-badge]: https://img.shields.io/crates/v/wasm-bindgen.svg?label=wasm-bindgen
+[wasm-bindgen]: https://docs.rs/wasm-bindgen/</code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="downloads"><a class="header" href="#downloads">Downloads</a></h1>
 <h2 id="download-a-file-to-a-temporary-directory"><a class="header" href="#download-a-file-to-a-temporary-directory">Download a file to a temporary directory</a></h2>
 <p><a href="https://docs.rs/reqwest/"><img src="https://img.shields.io/crates/v/reqwest.svg?label=reqwest" alt="reqwest-badge" /></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge" /></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a> <a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge" /></a></p>
@@ -6749,6 +6804,329 @@ fn main() -&gt; Result&lt;(), Error&gt; {
 
     Ok(())
 }</code></pre></pre>
+<!--
+Links, in a few categories. Follow the existing structure.
+Keep lines sorted.
+-->
+<!-- Categories -->
+<!-- Crates -->
+<div style="break-before: page; page-break-before: always;"></div><h1 id="full-stack-web-2"><a class="header" href="#full-stack-web-2">Full Stack Web</a></h1>
+<p><a href="https://book.leptos.dev/">Leptos</a> is a full stack web framework. The first recipe renders HTML
+on the server only. The second adds hydration so the client can re-run the
+same components as WebAssembly for interactivity.</p>
+<h2 id="return-filtered-results-as-html"><a class="header" href="#return-filtered-results-as-html">Return filtered results as HTML</a></h2>
+<p><a href="https://docs.rs/leptos/"><img src="https://img.shields.io/crates/v/leptos.svg?label=leptos" alt="leptos-badge" /></a> <a href="https://docs.rs/leptos_router/"><img src="https://img.shields.io/crates/v/leptos_router.svg?label=leptos_router" alt="leptos-router-badge" /></a> <a href="https://docs.rs/leptos_axum/"><img src="https://img.shields.io/crates/v/leptos_axum.svg?label=leptos_axum" alt="leptos-axum-badge" /></a> <a href="https://docs.rs/axum/"><img src="https://img.shields.io/crates/v/axum.svg?label=axum" alt="axum-badge" /></a> <a href="https://docs.rs/tokio/"><img src="https://img.shields.io/crates/v/tokio.svg?label=tokio" alt="tokio-badge" /></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a></p>
+<p>The crate uses <a href="https://docs.rs/leptos/"><code>leptos</code></a> with the <code>ssr</code> feature, plus
+<a href="https://docs.rs/leptos_router/"><code>leptos_router</code></a>, <a href="https://docs.rs/leptos_axum/"><code>leptos_axum</code></a>,
+<a href="https://docs.rs/axum/"><code>axum</code></a>, and <a href="https://docs.rs/tokio/"><code>tokio</code></a>. It lives outside the main workspace
+because <code>leptos</code> needs <a href="https://doc.rust-lang.org/cargo/reference/resolver.html#resolver-versions"><code>resolver = "3"</code></a>.</p>
+<h3 id="define-the-router"><a class="header" href="#define-the-router">Define the router</a></h3>
+<p><a href="https://docs.rs/leptos_router/*/leptos_router/components/fn.Router.html"><code>Router</code></a> is responsible for what page is shown when the
+browser hits the app. The <a href="https://docs.rs/leptos_router/*/leptos_router/macro.path.html"><code>path!</code></a> macro is used to define what
+URL matches. The <code>:query</code> is a template — it matches anything and stores the
+value as <code>query</code> for the component to read later.</p>
+<pre><code class="language-rust ignore">#[component]
+fn App() -&gt; impl IntoView {
+    view! {
+        &lt;LeptosRouter&gt;
+            &lt;nav&gt;&lt;A href="/"&gt;"Home"&lt;/A&gt;" | "&lt;A href="/filter/serde"&gt;"serde"&lt;/A&gt;" | "&lt;A href="/filter/tokio"&gt;"tokio"&lt;/A&gt;&lt;/nav&gt;
+            &lt;main&gt;
+                &lt;Routes fallback=|| "Not found."&gt;
+                    &lt;Route path=path!("") view=HomePage /&gt;
+                    &lt;Route path=path!("/filter/:query") view=FilterPage /&gt;
+                &lt;/Routes&gt;
+            &lt;/main&gt;
+        &lt;/LeptosRouter&gt;
+    }
+}</code></pre>
+<p><a href="https://docs.rs/leptos_router/*/leptos_router/components/fn.A.html"><code>&lt;A&gt;</code></a> anchors links while <code>&lt;Routes fallback=...&gt;</code> is used to
+provide a default.</p>
+<p>More in the Leptos book: <a href="https://book.leptos.dev/router/16_routes.html">Defining <code>&lt;Routes/&gt;</code></a> and
+<a href="https://book.leptos.dev/router/17_nested_routing.html">Nested Routing</a>.</p>
+<h3 id="read-the-parameter-and-fetch-on-the-server"><a class="header" href="#read-the-parameter-and-fetch-on-the-server">Read the parameter and fetch on the server</a></h3>
+<p><a href="https://docs.rs/leptos_router/*/leptos_router/hooks/fn.use_params.html"><code>use_params</code></a> holds the values from the <code>Router</code>.
+<a href="https://docs.rs/leptos/*/leptos/prelude/struct.Resource.html#method.new"><code>Resource::new</code></a> uses a closure to fetch async. The closure
+runs on the server and <a href="https://book.leptos.dev/async/11_suspense.html"><code>&lt;Suspense&gt;</code></a> lets the user know the server
+is processing.</p>
+<pre><code class="language-rust ignore">#[derive(Params, PartialEq, Clone, Debug)]
+struct FilterParams {
+    query: Option&lt;String&gt;,
+}
+
+#[component]
+fn FilterPage() -&gt; impl IntoView {
+    let params = use_params::&lt;FilterParams&gt;();
+    let query = move || {
+        params
+            .read()
+            .as_ref()
+            .ok()
+            .and_then(|p| p.query.clone())
+            .unwrap_or_default()
+    };
+
+    let results = Resource::new(query, filter_crates);
+
+    view! {
+        &lt;h1&gt;"Results"&lt;/h1&gt;
+        &lt;Suspense fallback=|| view! { &lt;p&gt;"Loading..."&lt;/p&gt; }&gt;
+            {move || results.get().map(|r| match r {
+                Ok(items) =&gt; view! { &lt;CrateList items /&gt; }.into_any(),
+                Err(err) =&gt; view! { &lt;p&gt;{format!("error: {err}")}&lt;/p&gt; }.into_any(),
+            })}
+        &lt;/Suspense&gt;
+    }
+}</code></pre>
+<p><code>filter_crates</code> is a plain <code>async fn</code> that runs on the server. It resolves
+the data file via <a href="https://doc.rust-lang.org/std/macro.env.html"><code>env!</code></a><code>("CARGO_MANIFEST_DIR")</code> so the path
+works regardless of where the binary runs from.</p>
+<pre><code class="language-rust ignore">async fn filter_crates(query: String) -&gt; Result&lt;Vec&lt;String&gt;, String&gt; {
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("data/crates.txt");
+    let text = tokio::fs::read_to_string(path)
+        .await
+        .map_err(|e| e.to_string())?;
+    let q = query.to_lowercase();
+    Ok(text
+        .lines()
+        .filter(|line| line.to_lowercase().contains(&amp;q))
+        .map(String::from)
+        .collect())
+}</code></pre>
+<p>More in the Leptos book: <a href="https://book.leptos.dev/router/18_params_and_queries.html">Params and Queries</a>,
+<a href="https://book.leptos.dev/async/10_resources.html">Loading Data with Resources</a>, and <a href="https://book.leptos.dev/async/11_suspense.html">Suspense</a>.</p>
+<h3 id="write-a-reusable-component"><a class="header" href="#write-a-reusable-component">Write a reusable component</a></h3>
+<p>Components are functions annotated with <code>#[component]</code>. Props are ordinary
+function arguments.</p>
+<pre><code class="language-rust ignore">#[component]
+fn CrateList(items: Vec&lt;String&gt;) -&gt; impl IntoView {
+    view! {
+        &lt;p&gt;{format!("{} match(es)", items.len())}&lt;/p&gt;
+        &lt;ul&gt;
+            {items.into_iter().map(|name| view! { &lt;li&gt;{name}&lt;/li&gt; }).collect::&lt;Vec&lt;_&gt;&gt;()}
+        &lt;/ul&gt;
+    }
+}</code></pre>
+<p>More in the Leptos book: <a href="https://book.leptos.dev/view/03_components.html">Components and Props</a> and
+<a href="https://book.leptos.dev/view/09_component_children.html">Passing Children to Components</a>.</p>
+<h3 id="wire-up-axum"><a class="header" href="#wire-up-axum">Wire up Axum</a></h3>
+<p><code>generate_route_list(App)</code> walks the <code>Routes</code> tree to enumerate every path the
+router knows about. <code>leptos_routes</code> registers those paths as Axum GET handlers
+that render the shell on each request.</p>
+<pre><code class="language-rust ignore">fn shell(_options: LeptosOptions) -&gt; impl IntoView {
+    view! {
+        &lt;!DOCTYPE html&gt;
+        &lt;html&gt;
+            &lt;head&gt;
+                &lt;meta charset="utf-8" /&gt;
+                &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+                &lt;title&gt;"Crate Filter"&lt;/title&gt;
+            &lt;/head&gt;
+            &lt;body&gt;&lt;App /&gt;&lt;/body&gt;
+        &lt;/html&gt;
+    }
+}
+
+#[tokio::main]
+async fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    let addr: std::net::SocketAddr = "127.0.0.1:3000".parse()?;
+    let conf = LeptosOptions::builder()
+        .output_name("web_leptos")
+        .site_addr(addr)
+        .build();
+    let routes = generate_route_list(App);
+
+    let app = Router::new()
+        .leptos_routes(&amp;conf, routes, {
+            let opts = conf.clone();
+            move || shell(opts.clone())
+        })
+        .with_state(conf);
+
+    let listener = tokio::net::TcpListener::bind(&amp;addr).await?;
+    println!("listening on http://{addr}");
+    axum::serve(listener, app).await?;
+    Ok(())
+}</code></pre>
+<p>More in the Leptos book: <a href="https://book.leptos.dev/ssr/22_life_cycle.html">The Life of a Page Load</a> and
+<a href="https://book.leptos.dev/ssr/21_cargo_leptos.html"><code>cargo-leptos</code></a> (the tool most real apps graduate to).</p>
+<p>Run it:</p>
+<pre><code class="language-shell">cargo run --manifest-path crates/web_leptos/Cargo.toml
+# http://127.0.0.1:3000/
+# http://127.0.0.1:3000/filter/serde
+# http://127.0.0.1:3000/filter/tokio
+</code></pre>
+<h2 id="synchronize-component-state-with-the-server"><a class="header" href="#synchronize-component-state-with-the-server">Synchronize component state with the server</a></h2>
+<p><a href="https://docs.rs/leptos/"><img src="https://img.shields.io/crates/v/leptos.svg?label=leptos" alt="leptos-badge" /></a> <a href="https://docs.rs/leptos_axum/"><img src="https://img.shields.io/crates/v/leptos_axum.svg?label=leptos_axum" alt="leptos-axum-badge" /></a> <a href="https://docs.rs/axum/"><img src="https://img.shields.io/crates/v/axum.svg?label=axum" alt="axum-badge" /></a> <a href="https://docs.rs/tokio/"><img src="https://img.shields.io/crates/v/tokio.svg?label=tokio" alt="tokio-badge" /></a> <a href="https://docs.rs/wasm-bindgen/"><img src="https://img.shields.io/crates/v/wasm-bindgen.svg?label=wasm-bindgen" alt="wasm-bindgen-badge" /></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge" /></a></p>
+<p>Same <code>data/crates.txt</code> as the first recipe, but the user types in a text
+box and results update as they type — no page reload. The file stays on
+the server; the query round-trips through a server function.</p>
+<p>The recipe uses <a href="https://github.com/leptos-rs/cargo-leptos"><code>cargo-leptos</code></a> as the build tool and a
+<a href="https://doc.rust-lang.org/rustc/platform-support/wasm32-unknown-unknown.html"><code>wasm32-unknown-unknown</code></a> target:</p>
+<pre><code class="language-shell">cargo install cargo-leptos
+rustup target add wasm32-unknown-unknown
+</code></pre>
+<h3 id="split-ssr-and-hydrate-with-feature-flags"><a class="header" href="#split-ssr-and-hydrate-with-feature-flags">Split ssr and hydrate with feature flags</a></h3>
+<p>One crate, two builds. <code>ssr</code> pulls in the server deps and <code>hydrate</code> turns on
+the WASM client. <a href="https://github.com/leptos-rs/cargo-leptos"><code>cargo-leptos</code></a> drives both from
+<a href="https://github.com/leptos-rs/cargo-leptos#parameters-reference"><code>[package.metadata.leptos]</code></a>.</p>
+<pre><code class="language-toml">crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+leptos = "0.8.19"
+leptos_axum = { version = "0.8.9", optional = true }
+leptos_router = "0.8.13"
+axum = { version = "0.8", optional = true }
+tokio = { version = "1.42", features = ["rt-multi-thread", "macros"], optional = true }
+tower-http = "0.6"
+wasm-bindgen = "=0.2.118"
+console_error_panic_hook = "0.1"
+
+[dev-dependencies]
+cargo-leptos = "0.3.6"
+
+[features]
+hydrate = ["leptos/hydrate"]
+ssr = [
+    "dep:leptos_axum",
+    "dep:axum",
+    "dep:tokio",
+    "leptos/ssr",
+    "leptos_router/ssr",
+]
+
+[package.metadata.leptos]
+output-name = "web_leptos_hydrate"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+site-addr = "127.0.0.1:3000"
+reload-port = 3001
+bin-features = ["ssr"]
+</code></pre>
+<h3 id="put-the-filter-behind-a-server-function"><a class="header" href="#put-the-filter-behind-a-server-function">Put the filter behind a server function</a></h3>
+<p><a href="https://docs.rs/leptos/*/leptos/attr.server.html"><code>#[server]</code></a> makes <code>filter_crates</code> a function the client can
+call. The body only compiles into the <code>ssr</code> build and on <code>hydrate</code> the macro
+leaves a stub that POSTs to the server. <a href="https://docs.rs/tokio/*/tokio/fs/index.html"><code>tokio::fs</code></a> reads the
+file on the server as before.</p>
+<pre><code class="language-rust ignore">#[server]
+pub async fn filter_crates(query: String) -&gt; Result&lt;Vec&lt;String&gt;, ServerFnError&gt; {
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("data/crates.txt");
+    let text = tokio::fs::read_to_string(path).await?;
+    let q = query.to_lowercase();
+    Ok(text
+        .lines()
+        .filter(|line| line.to_lowercase().contains(&amp;q))
+        .map(String::from)
+        .collect())
+}</code></pre>
+<h3 id="bind-an-input-to-a-resource"><a class="header" href="#bind-an-input-to-a-resource">Bind an input to a resource</a></h3>
+<p>The <code>App</code> component is plain reactive Leptos — not behind <a href="https://book.leptos.dev/ssr/index.html"><code>ssr</code></a>
+nor <a href="https://book.leptos.dev/ssr/22_life_cycle.html"><code>hydrate</code></a>. <a href="https://docs.rs/leptos/*/leptos/prelude/fn.signal.html"><code>signal</code></a> holds the query,
+<a href="https://docs.rs/leptos/*/leptos/prelude/fn.event_target_value.html"><code>event_target_value</code></a> pulls the string out of each keystroke, and
+<a href="https://docs.rs/leptos/*/leptos/prelude/struct.Resource.html#method.new"><code>Resource::new</code></a> reruns <code>filter_crates</code> whenever the query
+changes. <a href="https://book.leptos.dev/async/11_suspense.html"><code>&lt;Suspense&gt;</code></a> paints results or the "Searching..."
+fallback.</p>
+<pre><code class="language-text">#[component]
+pub fn App() -&gt; impl IntoView {
+    let (query, set_query) = signal(String::new());
+    let results = Resource::new(
+        move || query.get(),
+        |q| async move { filter_crates(q).await },
+    );
+
+    view! {
+        &lt;h1&gt;"Crate search"&lt;/h1&gt;
+        &lt;input
+            type="text"
+            placeholder="Type to filter..."
+            prop:value=query
+            on:input=move |ev| set_query.set(event_target_value(&amp;ev))
+        /&gt;
+        &lt;Suspense fallback=|| view! { &lt;p&gt;"Searching..."&lt;/p&gt; }&gt;
+            {move || results.get().map(|r| match r {
+                Ok(items) =&gt; view! {
+                    &lt;p&gt;{format!("{} match(es)", items.len())}&lt;/p&gt;
+                    &lt;ul&gt;
+                        {items.into_iter().map(|name| view! { &lt;li&gt;{name}&lt;/li&gt; }).collect::&lt;Vec&lt;_&gt;&gt;()}
+                    &lt;/ul&gt;
+                }.into_any(),
+                Err(err) =&gt; view! { &lt;p&gt;{format!("error: {err}")}&lt;/p&gt; }.into_any(),
+            })}
+        &lt;/Suspense&gt;
+    }
+}
+</code></pre>
+<h3 id="server-side-render-the-shell-with-hydrationscripts"><a class="header" href="#server-side-render-the-shell-with-hydrationscripts">Server side: render the shell with <code>HydrationScripts</code></a></h3>
+<p><a href="https://docs.rs/leptos/*/leptos/hydration/fn.HydrationScripts.html"><code>&lt;HydrationScripts&gt;</code></a> emits the <code>&lt;script&gt;</code> tag that loads
+the WASM bundle. <a href="https://docs.rs/leptos/*/leptos/hydration/fn.AutoReload.html"><code>&lt;AutoReload&gt;</code></a> ships a reload script when
+<code>cargo leptos watch</code> is running.</p>
+<pre><code class="language-rust ignore">#[cfg(feature = "ssr")]
+pub fn shell(options: leptos::config::LeptosOptions) -&gt; impl IntoView {
+    view! {
+        &lt;!DOCTYPE html&gt;
+        &lt;html&gt;
+            &lt;head&gt;
+                &lt;meta charset="utf-8" /&gt;
+                &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+                &lt;AutoReload options=options.clone() /&gt;
+                &lt;HydrationScripts options /&gt;
+                &lt;title&gt;"Crate search"&lt;/title&gt;
+            &lt;/head&gt;
+            &lt;body&gt;&lt;App /&gt;&lt;/body&gt;
+        &lt;/html&gt;
+    }
+}</code></pre>
+<h3 id="client-side-hydrate-the-body"><a class="header" href="#client-side-hydrate-the-body">Client side: <code>hydrate</code> the body</a></h3>
+<p><a href="https://docs.rs/leptos/*/leptos/mount/fn.hydrate_body.html"><code>hydrate_body</code></a> runs the same <code>App</code> function in the browser
+and attaches it to the server-rendered DOM. <code>#[wasm_bindgen]</code> marks it as
+the entry point the generated JS will call.</p>
+<pre><code class="language-rust ignore">#[cfg(feature = "hydrate")]
+#[wasm_bindgen::prelude::wasm_bindgen]
+pub fn hydrate() {
+    console_error_panic_hook::set_once();
+    leptos::mount::hydrate_body(App);
+}</code></pre>
+<h3 id="wire-up-axum-behind-the-ssr-feature"><a class="header" href="#wire-up-axum-behind-the-ssr-feature">Wire up Axum behind the <code>ssr</code> feature</a></h3>
+<p><a href="https://docs.rs/leptos/*/leptos/config/fn.get_configuration.html"><code>get_configuration</code></a> reads the
+<code>[package.metadata.leptos]</code> section. <code>leptos_routes</code> also registers the
+server function endpoint automatically.</p>
+<pre><code class="language-rust ignore">#[cfg(feature = "ssr")]
+#[tokio::main]
+async fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    use axum::Router;
+    use leptos::config::get_configuration;
+    use leptos_axum::{LeptosRoutes, generate_route_list};
+    use std::path::Path;
+    use tower_http::services::ServeDir;
+    use web_leptos_hydrate::{App, shell};
+
+    let conf = get_configuration(None)?;
+    let options = conf.leptos_options;
+    let addr = options.site_addr;
+    let routes = generate_route_list(App);
+
+    let app = Router::new()
+        .leptos_routes(&amp;options, routes, {
+            let opts = options.clone();
+            move || shell(opts.clone())
+        })
+        .nest_service("/pkg", ServeDir::new(Path::new(&amp;*options.site_root).join("pkg")))
+        .with_state(options);
+
+    let listener = tokio::net::TcpListener::bind(&amp;addr).await?;
+    println!("listening on http://{addr}");
+    axum::serve(listener, app).await?;
+    Ok(())
+}
+
+#[cfg(not(feature = "ssr"))]
+fn main() {}</code></pre>
+<p>Run it:</p>
+<pre><code class="language-shell">cd crates/web_leptos_hydrate
+cargo leptos watch
+# http://127.0.0.1:3000/
+</code></pre>
+<p>More in the Leptos book: <a href="https://book.leptos.dev/server/25_server_functions.html">Server Functions</a> and
+<a href="https://book.leptos.dev/ssr/21_cargo_leptos.html"><code>cargo-leptos</code></a>.</p>
 <!--
 Links, in a few categories. Follow the existing structure.
 Keep lines sorted.

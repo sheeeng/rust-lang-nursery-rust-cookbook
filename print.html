@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-de9bfd91.js";
+            window.path_to_searchindex_js = "searchindex-598a8977.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-29e1e3c6.js"></script>
+        <script src="toc-6582db82.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -487,9 +487,14 @@ Keep lines sorted.
 <tr><th>Recipe</th><th>Crates</th><th>Categories</th></tr>
 </thead>
 <tbody>
+<tr><td><a href="#read-a-whole-file-into-a-string">Read a whole file into a string</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
+<tr><td><a href="#write-a-string-to-a-file">Write a string to a file</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#read-lines-of-strings-from-a-file">Read lines of strings from a file</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
+<tr><td><a href="#rename-or-atomically-replace-a-file">Rename or atomically replace a file</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#avoid-writing-and-reading-from-a-same-file">Avoid writing and reading from a same file</a></td><td><a href="https://docs.rs/same-file/"><img src="https://img.shields.io/crates/v/same_file.svg?label=same_file" alt="same_file-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#access-a-file-randomly-using-a-memory-map">Access a file randomly using a memory map</a></td><td><a href="https://docs.rs/memmap/"><img src="https://img.shields.io/crates/v/memmap.svg?label=memmap" alt="memmap-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
+<tr><td><a href="#construct-and-inspect-a-path">Construct and inspect a path</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
+<tr><td><a href="#create-a-nested-directory-tree">Create a nested directory tree</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#file-names-that-have-been-modified-in-the-last-24-hours">File names that have been modified in the last 24 hours</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a> <a href="https://crates.io/categories/os"><img src="https://img.shields.io/badge/OS--x.svg?style=social" alt="cat-os-badge"></a></td></tr>
 <tr><td><a href="#find-loops-for-a-given-path">Find loops for a given path</a></td><td><a href="https://docs.rs/same-file/"><img src="https://img.shields.io/crates/v/same_file.svg?label=same_file" alt="same_file-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#recursively-find-duplicate-file-names">Recursively find duplicate file names</a></td><td><a href="https://docs.rs/walkdir/"><img src="https://img.shields.io/crates/v/walkdir.svg?label=walkdir" alt="walkdir-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
@@ -552,6 +557,18 @@ Keep lines sorted.
 </thead>
 <tbody>
 <tr><td><a href="#listen-on-unused-port-tcpip">Listen on unused port TCP/IP</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#tcp-echo-server">TCP echo server</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#tcp-client">TCP client</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#tcp-connect-with-a-timeout">TCP connect with a timeout</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#set-a-read-timeout-on-a-tcp-stream">Set a read timeout on a TCP stream</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#disable-nagles-algorithm">Disable Nagle’s algorithm</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#half-close-a-tcp-connection">Half-close a TCP connection</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#non-blocking-tcp-accept">Non-blocking TCP accept</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#send-and-receive-a-udp-datagram">Send and receive a UDP datagram</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#join-a-udp-multicast-group">Join a UDP multicast group</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#resolve-a-hostname-to-socket-addresses">Resolve a hostname to socket addresses</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#classify-an-ip-address">Classify an IP address</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#bind-for-both-ipv4-and-ipv6">Bind for both IPv4 and IPv6</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
 </tbody>
 </table>
 </div>
@@ -5031,9 +5048,14 @@ Keep lines sorted.
 <tr><th>Recipe</th><th>Crates</th><th>Categories</th></tr>
 </thead>
 <tbody>
+<tr><td><a href="#read-a-whole-file-into-a-string">Read a whole file into a string</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
+<tr><td><a href="#write-a-string-to-a-file">Write a string to a file</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#read-lines-of-strings-from-a-file">Read lines of strings from a file</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
+<tr><td><a href="#rename-or-atomically-replace-a-file">Rename or atomically replace a file</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#avoid-writing-and-reading-from-a-same-file">Avoid writing and reading from a same file</a></td><td><a href="https://docs.rs/same-file/"><img src="https://img.shields.io/crates/v/same_file.svg?label=same_file" alt="same_file-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#access-a-file-randomly-using-a-memory-map">Access a file randomly using a memory map</a></td><td><a href="https://docs.rs/memmap/"><img src="https://img.shields.io/crates/v/memmap.svg?label=memmap" alt="memmap-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
+<tr><td><a href="#construct-and-inspect-a-path">Construct and inspect a path</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
+<tr><td><a href="#create-a-nested-directory-tree">Create a nested directory tree</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#file-names-that-have-been-modified-in-the-last-24-hours">File names that have been modified in the last 24 hours</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a> <a href="https://crates.io/categories/os"><img src="https://img.shields.io/badge/OS--x.svg?style=social" alt="cat-os-badge"></a></td></tr>
 <tr><td><a href="#find-loops-for-a-given-path">Find loops for a given path</a></td><td><a href="https://docs.rs/same-file/"><img src="https://img.shields.io/crates/v/same_file.svg?label=same_file" alt="same_file-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
 <tr><td><a href="#recursively-find-duplicate-file-names">Recursively find duplicate file names</a></td><td><a href="https://docs.rs/walkdir/"><img src="https://img.shields.io/crates/v/walkdir.svg?label=walkdir" alt="walkdir-badge"></a></td><td><a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></td></tr>
@@ -5053,6 +5075,58 @@ Keep lines sorted.
 <!-- Crates -->
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="read--write"><a class="header" href="#read--write">Read &amp; Write</a></h1>
+<h2 id="read-a-whole-file-into-a-string"><a class="header" href="#read-a-whole-file-into-a-string">Read a whole file into a string</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a> <a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></p>
+<p><a href="https://doc.rust-lang.org/std/fs/fn.read_to_string.html"><code>fs::read_to_string</code></a> opens the file, reads it to end, closes it, and returns
+a <a href="https://doc.rust-lang.org/std/string/struct.String.html"><code>String</code></a> — one call for the common case of loading a small text file in
+full. It sizes the buffer from the file’s length up front, so the read is a
+single allocation plus a single syscall loop.</p>
+<p>For files large enough that loading them whole would waste memory, switch to a
+<a href="https://doc.rust-lang.org/std/io/struct.BufReader.html"><code>BufReader</code></a> over <a href="https://doc.rust-lang.org/std/fs/struct.File.html#method.open"><code>File::open</code></a> and stream lines or bytes. The cutoff is
+workload-specific; past a few megabytes, the streaming form is usually the
+right choice.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::fs;
+use std::io;
+use tempfile::tempdir;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let dir = tempdir()?;
+    let path = dir.path().join("config.toml");
+    fs::write(&amp;path, "name = \"cookbook\"\nedition = 2021\n")?;
+
+    // One call: open, read, close.
+    let contents = fs::read_to_string(&amp;path)?;
+    assert!(contents.contains("cookbook"));
+    println!("{contents}");
+    Ok(())
+}</code></pre>
+<h2 id="write-a-string-to-a-file"><a class="header" href="#write-a-string-to-a-file">Write a string to a file</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a> <a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></p>
+<p><a href="https://doc.rust-lang.org/std/fs/fn.write.html"><code>fs::write</code></a> is the mirror of <a href="https://doc.rust-lang.org/std/fs/fn.read_to_string.html"><code>fs::read_to_string</code></a>: it opens the path,
+writes the bytes, and closes the file in one call. The semantics are
+create-or-truncate — if the file exists, its previous contents are discarded;
+if it doesn’t, it’s created with default permissions.</p>
+<p>To append instead of replacing, build a <a href="https://doc.rust-lang.org/std/fs/struct.File.html"><code>File</code></a> through <a href="https://doc.rust-lang.org/std/fs/struct.OpenOptions.html"><code>OpenOptions</code></a> with
+<a href="https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#method.append"><code>append</code></a> set. To refuse to overwrite an existing file — useful when a stale
+file would be a bug — use <a href="https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#method.create_new"><code>create_new</code></a> instead of <code>create</code>.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::fs;
+use std::io;
+use tempfile::tempdir;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let dir = tempdir()?;
+    let path = dir.path().join("report.txt");
+
+    // Creates the file if missing.
+    fs::write(&amp;path, "build ok\n")?;
+
+    // Calling write again replaces — does not append to — the previous contents.
+    fs::write(&amp;path, "build ok\nemitted 12 warnings\n")?;
+
+    let back = fs::read_to_string(&amp;path)?;
+    assert_eq!(back, "build ok\nemitted 12 warnings\n");
+    Ok(())
+}</code></pre>
 <h2 id="read-lines-of-strings-from-a-file"><a class="header" href="#read-lines-of-strings-from-a-file">Read lines of strings from a file</a></h2>
 <p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></p>
 <p>Writes a three-line message to a file, then reads it back a line at a
@@ -5076,6 +5150,38 @@ fn main() -&gt; Result&lt;(), Error&gt; {
         println!("{}", line?);
     }
 
+    Ok(())
+}</code></pre>
+<h2 id="rename-or-atomically-replace-a-file"><a class="header" href="#rename-or-atomically-replace-a-file">Rename or atomically replace a file</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a> <a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></p>
+<p><a href="https://doc.rust-lang.org/std/fs/fn.rename.html"><code>fs::rename</code></a> is the atomic-replace primitive when source and destination
+live on the same filesystem: on Unix it’s a single <code>rename(2)</code> syscall, on
+Windows it’s <code>MoveFileExW</code> with <code>MOVEFILE_REPLACE_EXISTING</code>. A concurrent
+reader either opens the old contents or the new — never a half-written file,
+never a window where the path is missing.</p>
+<p>The write-to-temp-then-rename pattern below is how editors, package managers,
+and config writers avoid leaving a torn file behind if the process dies
+mid-write. The staging file and the final path must live on the same
+filesystem; across devices the kernel has no atomic move, and <code>rename</code> fails
+instead of silently degrading to a copy.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::fs;
+use std::io;
+use tempfile::tempdir;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let dir = tempdir()?;
+    let final_path = dir.path().join("config.toml");
+    let staging = dir.path().join("config.toml.new");
+
+    // Write the new contents to a sibling path first...
+    fs::write(&amp;staging, "version = 2\n")?;
+
+    // ...then swap it into place. Readers see either the old file or the
+    // new one, never a partial write.
+    fs::rename(&amp;staging, &amp;final_path)?;
+
+    assert_eq!(fs::read_to_string(&amp;final_path)?, "version = 2\n");
+    assert!(!staging.exists());
     Ok(())
 }</code></pre>
 <h2 id="avoid-writing-and-reading-from-a-same-file"><a class="header" href="#avoid-writing-and-reading-from-a-same-file">Avoid writing and reading from a same file</a></h2>
@@ -5145,6 +5251,72 @@ Keep lines sorted.
 <!-- Crates -->
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="directory-traversal"><a class="header" href="#directory-traversal">Directory Traversal</a></h1>
+<h2 id="construct-and-inspect-a-path"><a class="header" href="#construct-and-inspect-a-path">Construct and inspect a path</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></p>
+<p>Most filesystem code is path arithmetic before it touches the disk. <a href="https://doc.rust-lang.org/std/path/struct.PathBuf.html"><code>PathBuf</code></a>
+owns the buffer; <a href="https://doc.rust-lang.org/std/path/struct.Path.html"><code>Path</code></a> is the borrowed view. The inspection methods —
+<a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.file_name"><code>file_name</code></a>, <a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.file_stem"><code>file_stem</code></a>, <a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.extension"><code>extension</code></a>, <a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.parent"><code>parent</code></a> — return <code>Option</code>
+because a path might not have the component you ask for.</p>
+<p><a href="https://doc.rust-lang.org/std/path/struct.PathBuf.html#method.push"><code>PathBuf::push</code></a> grows the buffer one component at a time. <a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.with_extension"><code>with_extension</code></a>
+and <a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.with_file_name"><code>with_file_name</code></a> derive sibling or backup paths in one call without
+mutating the original. Conversion to <code>&amp;str</code> goes through <a href="https://doc.rust-lang.org/std/path/struct.Path.html#method.to_str"><code>Path::to_str</code></a>,
+which returns <code>None</code> on non-UTF-8 paths.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::ffi::OsStr;
+use std::path::{Path, PathBuf};
+
+fn main() {
+    let mut path = PathBuf::from("/etc/nginx");
+    path.push("sites-available");
+    path.push("default.conf");
+
+    assert_eq!(path.parent(), Some(Path::new("/etc/nginx/sites-available")));
+    assert_eq!(path.file_name(), Some(OsStr::new("default.conf")));
+    assert_eq!(path.file_stem(), Some(OsStr::new("default")));
+    assert_eq!(path.extension(), Some(OsStr::new("conf")));
+
+    // Derive a backup name and a sibling path without mutating `path`.
+    let backup = path.with_extension("conf.bak");
+    assert_eq!(backup.file_name(), Some(OsStr::new("default.conf.bak")));
+
+    let sibling = path.with_file_name("nginx.conf");
+    assert_eq!(sibling, Path::new("/etc/nginx/sites-available/nginx.conf"));
+
+    // Borrow a `Path` as `&amp;str` for APIs that need one.
+    let s: &amp;str = path.to_str().expect("path is valid UTF-8");
+    println!("{s}");
+}</code></pre>
+<h2 id="create-a-nested-directory-tree"><a class="header" href="#create-a-nested-directory-tree">Create a nested directory tree</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://docs.rs/tempfile/"><img src="https://img.shields.io/crates/v/tempfile.svg?label=tempfile" alt="tempfile-badge"></a> <a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></p>
+<p><a href="https://doc.rust-lang.org/std/fs/fn.create_dir_all.html"><code>fs::create_dir_all</code></a> is <code>mkdir -p</code>: it walks the requested path and creates
+every missing intermediate directory. It’s idempotent — calling it on a path
+that already exists returns <code>Ok(())</code>, not an error — so it’s the right call
+when seeding cache directories or log roots on startup.</p>
+<p><a href="https://doc.rust-lang.org/std/fs/fn.create_dir.html"><code>fs::create_dir</code></a> only creates the final component. If any parent on the way
+is missing it fails with <a href="https://doc.rust-lang.org/std/io/enum.ErrorKind.html#variant.NotFound"><code>io::ErrorKind::NotFound</code></a>. Reach for <code>create_dir</code>
+when the parent is known to exist and you want the operation to fail loudly
+if your assumption is wrong.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::fs;
+use std::io;
+use tempfile::tempdir;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let root = tempdir()?;
+    let nested = root.path().join("cache").join("2026").join("05");
+
+    // Creates every missing component along the way.
+    fs::create_dir_all(&amp;nested)?;
+    assert!(nested.is_dir());
+
+    // Calling it again on an existing directory is not an error.
+    fs::create_dir_all(&amp;nested)?;
+
+    // `create_dir` only creates the leaf, and only when the parent exists.
+    let leaf = nested.join("26");
+    fs::create_dir(&amp;leaf)?;
+    assert!(leaf.is_dir());
+
+    Ok(())
+}</code></pre>
 <h2 id="file-names-that-have-been-modified-in-the-last-24-hours"><a class="header" href="#file-names-that-have-been-modified-in-the-last-24-hours">File names that have been modified in the last 24 hours</a></h2>
 <p><a href="https://docs.rs/walkdir/"><img src="https://img.shields.io/crates/v/walkdir.svg?label=walkdir" alt="walkdir-badge"></a> <a href="https://crates.io/categories/filesystem"><img src="https://img.shields.io/badge/filesystem--x.svg?style=social" alt="cat-filesystem-badge"></a></p>
 <p>Gets the current working directory and returns file names modified within the last 24 hours.
@@ -5506,6 +5678,18 @@ Keep lines sorted.
 </thead>
 <tbody>
 <tr><td><a href="#listen-on-unused-port-tcpip">Listen on unused port TCP/IP</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#tcp-echo-server">TCP echo server</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#tcp-client">TCP client</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#tcp-connect-with-a-timeout">TCP connect with a timeout</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#set-a-read-timeout-on-a-tcp-stream">Set a read timeout on a TCP stream</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#disable-nagles-algorithm">Disable Nagle’s algorithm</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#half-close-a-tcp-connection">Half-close a TCP connection</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#non-blocking-tcp-accept">Non-blocking TCP accept</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#send-and-receive-a-udp-datagram">Send and receive a UDP datagram</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#join-a-udp-multicast-group">Join a UDP multicast group</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#resolve-a-hostname-to-socket-addresses">Resolve a hostname to socket addresses</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#classify-an-ip-address">Classify an IP address</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
+<tr><td><a href="#bind-for-both-ipv4-and-ipv6">Bind for both IPv4 and IPv6</a></td><td><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a></td><td><a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></td></tr>
 </tbody>
 </table>
 </div>
@@ -5516,11 +5700,11 @@ Keep lines sorted.
 <!-- Categories -->
 <!-- Crates -->
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="server"><a class="header" href="#server">Server</a></h1>
+<h1 id="tcp"><a class="header" href="#tcp">TCP</a></h1>
 <h2 id="listen-on-unused-port-tcpip"><a class="header" href="#listen-on-unused-port-tcpip">Listen on unused port TCP/IP</a></h2>
 <p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
 <p>In this example, the port is displayed on the console, and the program will
-listen until a request is made.  <code>TcpListener::bind</code> uses a random port
+listen until a request is made.  <a href="https://doc.rust-lang.org/std/net/struct.TcpListener.html#method.bind"><code>TcpListener::bind</code></a> uses a random port
 allocated by the OS when requested to bind to port 0.</p>
 <pre class="playground"><code class="language-rust edition2018 no_run">use std::net::TcpListener;
 use std::io::{Read, Error};
@@ -5534,6 +5718,351 @@ fn main() -&gt; Result&lt;(), Error&gt; {
     let mut input = String::new();
     let _ = tcp_stream.read_to_string(&amp;mut input)?;
     println!("{:?} says {}", addr, input);
+    Ok(())
+}</code></pre>
+<h2 id="tcp-echo-server"><a class="header" href="#tcp-echo-server">TCP echo server</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>When you’re building a TCP client you need a server that behaves predictably.
+An echo server is that server: every byte you send comes back unchanged. Point
+your client at it to check framing, disconnect handling, or timeouts.</p>
+<p><a href="https://doc.rust-lang.org/std/net/struct.TcpListener.html#method.bind"><code>TcpListener::bind</code></a> starts listening on an address. <a href="https://doc.rust-lang.org/std/net/struct.TcpListener.html#method.incoming"><code>incoming</code></a> yields each
+new connection. Spawning a thread per connection keeps the accept loop free for
+the next client. Inside the handler, <a href="https://doc.rust-lang.org/std/io/trait.Read.html#tymethod.read"><code>read</code></a> returning <code>0</code> means the peer
+closed the connection — that’s the cue to drop out of the loop.</p>
+<pre class="playground"><code class="language-rust edition2021 no_run">use std::io::{self, Read, Write};
+use std::net::{TcpListener, TcpStream};
+use std::thread;
+
+fn handle_connection(mut stream: TcpStream) -&gt; io::Result&lt;()&gt; {
+    let mut buf = [0u8; 1024];
+    loop {
+        let n = stream.read(&amp;mut buf)?;
+        if n == 0 {
+            return Ok(());
+        }
+        stream.write_all(&amp;buf[..n])?;
+    }
+}
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let listener = TcpListener::bind("127.0.0.1:7878")?;
+    println!("echo server listening on {}", listener.local_addr()?);
+    for incoming in listener.incoming() {
+        let stream = incoming?;
+        thread::spawn(move || {
+            if let Err(e) = handle_connection(stream) {
+                eprintln!("connection error: {e}");
+            }
+        });
+    }
+    Ok(())
+}</code></pre>
+<h2 id="tcp-client"><a class="header" href="#tcp-client">TCP client</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>With the echo server from the previous recipe running on <code>127.0.0.1:7878</code>, a
+client can connect, send a message, and read the reply.</p>
+<p><a href="https://doc.rust-lang.org/std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a> opens a connection. The returned <a href="https://doc.rust-lang.org/std/net/struct.TcpStream.html"><code>TcpStream</code></a> is both a
+reader and a writer. <a href="https://doc.rust-lang.org/std/io/trait.Write.html#method.write_all"><code>write_all</code></a> sends the request; <a href="https://doc.rust-lang.org/std/io/trait.Read.html#tymethod.read"><code>read</code></a> fills a buffer
+with whatever the server returns. Echo guarantees the bytes round-trip
+unchanged, so the client can assert on what came back.</p>
+<pre class="playground"><code class="language-rust edition2021 no_run">use std::io::{self, Read, Write};
+use std::net::TcpStream;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let mut stream = TcpStream::connect("127.0.0.1:7878")?;
+    stream.write_all(b"ping")?;
+
+    let mut buf = [0u8; 4];
+    stream.read_exact(&amp;mut buf)?;
+    println!("echo: {}", std::str::from_utf8(&amp;buf).unwrap_or("&lt;binary&gt;"));
+
+    assert_eq!(&amp;buf, b"ping");
+    Ok(())
+}</code></pre>
+<h2 id="tcp-connect-with-a-timeout"><a class="header" href="#tcp-connect-with-a-timeout">TCP connect with a timeout</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>Plain <a href="https://doc.rust-lang.org/std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a> waits for the kernel to give up on SYN retries.
+When the peer is down or a firewall is silently dropping packets, that can
+take a minute or more. <a href="https://doc.rust-lang.org/std/net/struct.TcpStream.html#method.connect_timeout"><code>TcpStream::connect_timeout</code></a> caps the wait.</p>
+<p>The timeout variant takes a <a href="https://doc.rust-lang.org/std/net/enum.SocketAddr.html"><code>SocketAddr</code></a>, not a string, so resolve the
+hostname first.</p>
+<pre class="playground"><code class="language-rust edition2021 no_run">use std::io;
+use std::net::{TcpStream, ToSocketAddrs};
+use std::time::Duration;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let addr = "example.com:443"
+        .to_socket_addrs()?
+        .next()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "no address"))?;
+
+    match TcpStream::connect_timeout(&amp;addr, Duration::from_secs(3)) {
+        Ok(_stream) =&gt; println!("connected to {addr}"),
+        Err(e) if e.kind() == io::ErrorKind::TimedOut =&gt; {
+            eprintln!("connect timed out");
+        }
+        Err(e) =&gt; return Err(e),
+    }
+    Ok(())
+}</code></pre>
+<h2 id="set-a-read-timeout-on-a-tcp-stream"><a class="header" href="#set-a-read-timeout-on-a-tcp-stream">Set a read timeout on a TCP stream</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>A default <a href="https://doc.rust-lang.org/std/net/struct.TcpStream.html"><code>TcpStream</code></a> read blocks until data arrives or the peer hangs up.
+If the peer goes silent — process stuck, network partition, slow upstream —
+the read hangs with it. <a href="https://doc.rust-lang.org/std/net/struct.TcpStream.html#method.set_read_timeout"><code>set_read_timeout</code></a> caps the wait.</p>
+<p>On timeout the read returns an <a href="https://doc.rust-lang.org/std/io/struct.Error.html"><code>io::Error</code></a>. The platform decides the kind:
+<a href="https://doc.rust-lang.org/std/io/enum.ErrorKind.html#variant.WouldBlock"><code>WouldBlock</code></a> on Unix, <a href="https://doc.rust-lang.org/std/io/enum.ErrorKind.html#variant.TimedOut"><code>TimedOut</code></a> on Windows. Match both or your code
+breaks on the other platform.</p>
+<p>This example stands up a listener that accepts but never sends, then connects
+and reads with a short timeout to prove the timeout fires.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::io::{self, Read};
+use std::net::{TcpListener, TcpStream};
+use std::thread;
+use std::time::Duration;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let listener = TcpListener::bind("127.0.0.1:0")?;
+    let addr = listener.local_addr()?;
+
+    // Accept the connection but never write to it.
+    thread::spawn(move || {
+        let _conn = listener.accept();
+        thread::sleep(Duration::from_secs(60));
+    });
+
+    let mut stream = TcpStream::connect(addr)?;
+    stream.set_read_timeout(Some(Duration::from_millis(50)))?;
+
+    let mut buf = [0u8; 16];
+    match stream.read(&amp;mut buf) {
+        Ok(n) =&gt; println!("received {n} bytes"),
+        Err(e) if e.kind() == io::ErrorKind::WouldBlock
+            || e.kind() == io::ErrorKind::TimedOut =&gt;
+        {
+            println!("read timed out ({:?})", e.kind());
+        }
+        Err(e) =&gt; return Err(e),
+    }
+    Ok(())
+}</code></pre>
+<h2 id="disable-nagles-algorithm"><a class="header" href="#disable-nagles-algorithm">Disable Nagle’s algorithm</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>TCP coalesces small writes by default — Nagle’s algorithm — to avoid
+flooding the network with tiny packets. For interactive protocols that’s the
+wrong tradeoff: a typed keystroke or a chat message can sit in the kernel
+buffer for tens of milliseconds waiting for company. <a href="https://doc.rust-lang.org/std/net/struct.TcpStream.html#method.set_nodelay"><code>set_nodelay</code></a> turns
+Nagle off so each write goes out as its own segment.</p>
+<p>Use it for chat, games, REPL-style protocols, and RPCs where round-trip
+latency matters more than packet count. Leave it on for bulk transfer.</p>
+<pre class="playground"><code class="language-rust edition2021 no_run">use std::io::{self, Write};
+use std::net::TcpStream;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let mut stream = TcpStream::connect("127.0.0.1:7878")?;
+    stream.set_nodelay(true)?;
+
+    stream.write_all(b"ping ")?;
+    stream.write_all(b"pong\n")?;
+    Ok(())
+}</code></pre>
+<h2 id="half-close-a-tcp-connection"><a class="header" href="#half-close-a-tcp-connection">Half-close a TCP connection</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>Many request-then-response protocols expect the client to finish sending
+before the server replies: HTTP/1.0, custom RPCs, anything that reads
+until EOF. To say “I’m done sending, give me your reply” without losing the
+ability to read, shut down only the write side with <a href="https://doc.rust-lang.org/std/net/enum.Shutdown.html#variant.Write"><code>Shutdown::Write</code></a>.</p>
+<p>After the half-close the peer sees EOF on its read, can do its work, and
+writes a response that you read normally. <a href="https://doc.rust-lang.org/std/io/trait.Read.html#method.read_to_end"><code>read_to_end</code></a> keeps reading until
+the peer closes its own write half.</p>
+<pre class="playground"><code class="language-rust edition2021 no_run">use std::io::{self, Read, Write};
+use std::net::{Shutdown, TcpStream};
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let mut stream = TcpStream::connect("example.com:80")?;
+    stream.write_all(b"GET / HTTP/1.0\r\nHost: example.com\r\n\r\n")?;
+    stream.shutdown(Shutdown::Write)?;
+
+    let mut response = Vec::new();
+    stream.read_to_end(&amp;mut response)?;
+    println!("received {} bytes", response.len());
+    Ok(())
+}</code></pre>
+<h2 id="non-blocking-tcp-accept"><a class="header" href="#non-blocking-tcp-accept">Non-blocking TCP accept</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>A normal <a href="https://doc.rust-lang.org/std/net/struct.TcpListener.html#method.accept"><code>accept</code></a> blocks until a client arrives. If a single thread needs
+to do other work between connections — poll a timer, watch another file
+descriptor — flip the listener into non-blocking mode with
+<a href="https://doc.rust-lang.org/std/net/struct.TcpListener.html#method.set_nonblocking"><code>set_nonblocking</code></a>. <a href="https://doc.rust-lang.org/std/net/struct.TcpListener.html#method.accept"><code>accept</code></a> then returns immediately with an
+<a href="https://doc.rust-lang.org/std/io/struct.Error.html"><code>io::Error</code></a> of kind <a href="https://doc.rust-lang.org/std/io/enum.ErrorKind.html#variant.WouldBlock"><code>WouldBlock</code></a> when nothing is pending.</p>
+<p>This readiness pattern is the primitive every async runtime uses underneath.
+For production code, reach for <a href="https://docs.rs/mio"><code>mio</code></a> or an async runtime — what follows is
+the manual version of what they automate.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::io::{self, ErrorKind};
+use std::net::{TcpListener, TcpStream};
+use std::thread;
+use std::time::Duration;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let listener = TcpListener::bind("127.0.0.1:0")?;
+    let addr = listener.local_addr()?;
+    listener.set_nonblocking(true)?;
+
+    // Spawn a client so the listener has something to accept.
+    thread::spawn(move || {
+        let _ = TcpStream::connect(addr);
+    });
+
+    let stream = loop {
+        match listener.accept() {
+            Ok((s, _)) =&gt; break s,
+            Err(e) if e.kind() == ErrorKind::WouldBlock =&gt; {
+                thread::sleep(Duration::from_millis(10));
+            }
+            Err(e) =&gt; return Err(e),
+        }
+    };
+
+    println!("accepted from {}", stream.peer_addr()?);
+    Ok(())
+}</code></pre>
+<!--
+Links, in a few categories. Follow the existing structure.
+Keep lines sorted.
+-->
+<!-- Categories -->
+<!-- Crates -->
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="udp"><a class="header" href="#udp">UDP</a></h1>
+<h2 id="send-and-receive-a-udp-datagram"><a class="header" href="#send-and-receive-a-udp-datagram">Send and receive a UDP datagram</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>UDP is connectionless: the sender fires a packet at an address and the receiver
+picks it up if it arrives. There is no session, no handshake, no retransmit.
+Statsd, syslog, NTP, and DNS all run on UDP for the same reason — minimum
+overhead when delivery guarantees aren’t worth the cost.</p>
+<p>This example wires both ends together so it runs as a single program. The
+collector binds to an OS-allocated port and waits with <a href="https://doc.rust-lang.org/std/net/struct.UdpSocket.html#method.recv_from"><code>recv_from</code></a>. The
+client binds to its own ephemeral port and uses <a href="https://doc.rust-lang.org/std/net/struct.UdpSocket.html#method.send_to"><code>send_to</code></a> to deliver a
+metric. <a href="https://doc.rust-lang.org/std/net/struct.UdpSocket.html#method.recv_from"><code>recv_from</code></a> returns the byte count and the sender’s address.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::io;
+use std::net::UdpSocket;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let collector = UdpSocket::bind("127.0.0.1:0")?;
+    let collector_addr = collector.local_addr()?;
+
+    let client = UdpSocket::bind("127.0.0.1:0")?;
+    client.send_to(b"app.requests:1|c", collector_addr)?;
+
+    let mut buf = [0u8; 1500];
+    let (n, from) = collector.recv_from(&amp;mut buf)?;
+    let metric = std::str::from_utf8(&amp;buf[..n]).unwrap_or("&lt;binary&gt;");
+    println!("received {n} bytes from {from}: {metric}");
+    Ok(())
+}</code></pre>
+<h2 id="join-a-udp-multicast-group"><a class="header" href="#join-a-udp-multicast-group">Join a UDP multicast group</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>Multicast lets one sender reach many receivers without addressing each one
+individually. Service discovery (mDNS, SSDP) and announcement protocols rely
+on it. A receiver binds to the multicast port and joins a group with
+<a href="https://doc.rust-lang.org/std/net/struct.UdpSocket.html#method.join_multicast_v4"><code>join_multicast_v4</code></a>; the OS then delivers any datagram sent to that group
+to every receiver that joined.</p>
+<p>Multicast group addresses live in <code>224.0.0.0/4</code>. Anything from <code>239.0.0.0</code> to
+<code>239.255.255.255</code> is reserved for private use — pick from there for in-house
+apps.</p>
+<pre class="playground"><code class="language-rust edition2021 no_run">use std::io;
+use std::net::{Ipv4Addr, SocketAddr, UdpSocket};
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let group = Ipv4Addr::new(239, 0, 0, 100);
+    let port = 7878;
+
+    // Receiver: bind to the port, then join the group on every interface.
+    let receiver = UdpSocket::bind(SocketAddr::from(([0, 0, 0, 0], port)))?;
+    receiver.join_multicast_v4(&amp;group, &amp;Ipv4Addr::UNSPECIFIED)?;
+
+    // Sender: any local socket can send to the group address.
+    let sender = UdpSocket::bind("0.0.0.0:0")?;
+    sender.send_to(b"hello group", SocketAddr::new(group.into(), port))?;
+
+    let mut buf = [0u8; 64];
+    let (n, from) = receiver.recv_from(&amp;mut buf)?;
+    println!("got {n} bytes from {from}");
+    Ok(())
+}</code></pre>
+<!--
+Links, in a few categories. Follow the existing structure.
+Keep lines sorted.
+-->
+<!-- Categories -->
+<!-- Crates -->
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="addresses"><a class="header" href="#addresses">Addresses</a></h1>
+<h2 id="resolve-a-hostname-to-socket-addresses"><a class="header" href="#resolve-a-hostname-to-socket-addresses">Resolve a hostname to socket addresses</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>Real config files don’t carry IP addresses, they carry hostnames like
+<code>api.internal:8080</code>. <a href="https://doc.rust-lang.org/std/net/trait.ToSocketAddrs.html"><code>ToSocketAddrs</code></a> turns those strings into an iterator
+of <a href="https://doc.rust-lang.org/std/net/enum.SocketAddr.html"><code>SocketAddr</code></a> you can connect to. It’s the same trait
+<a href="https://doc.rust-lang.org/std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a> calls under the hood when handed a string.</p>
+<p>A hostname can resolve to multiple addresses — at least one IPv4 and one
+IPv6 on any modern host. Walk all of them when you want to display every
+option, or take the first when one working address is enough.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::io;
+use std::net::ToSocketAddrs;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    for addr in "localhost:443".to_socket_addrs()? {
+        println!("localhost:443 → {addr}");
+    }
+    Ok(())
+}</code></pre>
+<h2 id="classify-an-ip-address"><a class="header" href="#classify-an-ip-address">Classify an IP address</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p>Before connecting to an address pulled from user input, a config file, or an
+HTTP redirect, check what kind it is. Loopback, link-local, and RFC1918
+private ranges have no business being targets for outbound traffic from a
+server exposed on the public internet — letting them through is the SSRF
+vector.</p>
+<p><a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html"><code>IpAddr</code></a> exposes <a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html#method.is_loopback"><code>is_loopback</code></a>, <a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html#method.is_multicast"><code>is_multicast</code></a>, and <a href="https://doc.rust-lang.org/std/net/enum.IpAddr.html#method.is_unspecified"><code>is_unspecified</code></a>
+on both v4 and v6. <a href="https://doc.rust-lang.org/std/net/struct.Ipv4Addr.html#method.is_private"><code>is_private</code></a> and <a href="https://doc.rust-lang.org/std/net/struct.Ipv4Addr.html#method.is_link_local"><code>is_link_local</code></a> are on <a href="https://doc.rust-lang.org/std/net/struct.Ipv4Addr.html"><code>Ipv4Addr</code></a>
+only — match the variant to reach them.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::net::IpAddr;
+use std::str::FromStr;
+
+fn classify(addr: IpAddr) -&gt; &amp;'static str {
+    if addr.is_loopback() { return "loopback"; }
+    if addr.is_multicast() { return "multicast"; }
+    if addr.is_unspecified() { return "unspecified"; }
+    if let IpAddr::V4(v4) = addr {
+        if v4.is_private() { return "private (RFC1918)"; }
+        if v4.is_link_local() { return "link-local"; }
+    }
+    "public"
+}
+
+fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    let samples = ["127.0.0.1", "10.0.0.5", "169.254.1.1", "8.8.8.8", "224.0.0.1", "::1"];
+    for s in samples {
+        let addr = IpAddr::from_str(s)?;
+        println!("{addr}: {}", classify(addr));
+    }
+    Ok(())
+}</code></pre>
+<h2 id="bind-for-both-ipv4-and-ipv6"><a class="header" href="#bind-for-both-ipv4-and-ipv6">Bind for both IPv4 and IPv6</a></h2>
+<p><a href="https://doc.rust-lang.org/std"><img src="https://img.shields.io/badge/std-1.29.1-blue.svg" alt="std-badge"></a> <a href="https://crates.io/categories/network-programming"><img src="https://img.shields.io/badge/net--x.svg?style=social" alt="cat-net-badge"></a></p>
+<p><code>0.0.0.0</code> accepts IPv4 clients only. To accept both protocols with a single
+listener, bind to the unspecified IPv6 address <code>[::]</code>. On Linux and macOS the
+listener accepts IPv6 clients natively and IPv4 clients via IPv4-mapped
+addresses (<code>::ffff:1.2.3.4</code>).</p>
+<p>On Windows and FreeBSD the <code>IPV6_V6ONLY</code> socket option defaults to true, so
+the same bind accepts IPv6 only. <a href="https://doc.rust-lang.org/std/net/index.html"><code>std::net</code></a> doesn’t expose <code>IPV6_V6ONLY</code>;
+the <a href="https://docs.rs/socket2"><code>socket2</code></a> crate does, or you can open two listeners.</p>
+<pre class="playground"><code class="language-rust edition2021">use std::io;
+use std::net::TcpListener;
+
+fn main() -&gt; io::Result&lt;()&gt; {
+    let listener = TcpListener::bind("[::]:0")?;
+    let addr = listener.local_addr()?;
+    println!("listening on {addr}");
     Ok(())
 }</code></pre>
 <!--

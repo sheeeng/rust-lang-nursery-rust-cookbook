@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-15abaeee.js";
+            window.path_to_searchindex_js = "searchindex-d0ad6050.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9149df39.js"></script>
+        <script src="toc-83955176.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -224,7 +224,7 @@ further information.</p>
 <p>All recipes in the cookbook are full, self contained programs, so
 that they may be copied directly into your own projects for
 experimentation. To do so follow the instructions below.</p>
-<p>Consider this example for “generate random numbers within a range”:</p>
+<p>Consider this recipe for “generate random numbers within a range”:</p>
 <p><a href="https://docs.rs/rand/"><img src="https://img.shields.io/crates/v/rand.svg?label=rand" alt="rand-badge"></a> <a href="https://crates.io/categories/science"><img src="https://img.shields.io/badge/science--x.svg?style=social" alt="cat-science-badge"></a></p>
 <pre class="playground"><code class="language-rust edition2018">use rand::RngExt;
 
@@ -244,15 +244,15 @@ we’ll use the <code>cargo add</code> command:</p>
 <pre><code class="language-sh">cargo add rand
 </code></pre>
 <p>Now you can replace <code>src/main.rs</code> with the full contents of the
-example and run it:</p>
+recipe and run it:</p>
 <pre><code class="language-sh">cargo run
 </code></pre>
-<p>The crate badges that accompany the examples link to the crates’ full
+<p>The crate badges that accompany the recipes link to the crates’ full
 documentation on <a href="https://docs.rs">docs.rs</a>, and is often the next documentation you
 should read after deciding which crate suites your purpose.</p>
 <h2 id="a-note-about-error-handling"><a class="header" href="#a-note-about-error-handling">A note about error handling</a></h2>
 <p>Rust has <a href="https://doc.rust-lang.org/std/error/trait.Error.html"><code>std::error::Trait</code></a> which is implemented to handle exceptions.
-This cookbook uses <a href="https://docs.rs/anyhow/latest/anyhow/"><code>anyhow</code></a> for simplified error handling in examples,
+This cookbook uses <a href="https://docs.rs/anyhow/latest/anyhow/"><code>anyhow</code></a> for simplified error handling in recipes,
 which provides easy error propagation and context. For library authors,
 <a href="https://docs.rs/thiserror/latest/thiserror/"><code>thiserror</code></a> provides a more structured approach using derive macros
 to create custom error types.</p>
@@ -271,11 +271,19 @@ quality levels as it grows.</p>
 “core”, or “foundational”, crates—those crates that make up the most
 common programming tasks, and that the rest of the ecosystem builds
 off of.</p>
-<p>The cookbook is closely tied to the <a href="https://internals.rust-lang.org/t/rust-libz-blitz/5184">Rust Libz Blitz</a>, a project to
-identify, and improve the quality of such crates, and so it largely
-defers crate selection to that project. Any crates that have already
-been evaluated as part of that process are in scope for the cookbook,
-as are crates that are pending evaluation.</p>
+<p>A crate is in scope for the cookbook if it meets one of these bars:</p>
+<ul>
+<li>It is the (or a) recommendation for its problem domain on
+<a href="https://blessed.rs">blessed.rs</a>, a curated guide to which crate to reach for in a given
+situation.</li>
+<li>It ranks at or near the top of its <a href="https://crates.io">crates.io</a> category, sorted by
+downloads. Category rank matters more than raw download count, since
+aggregate downloads favor old, low-level crates (like <code>libc</code> or
+<code>syn</code>) that aren’t cookbook material on their own.</li>
+</ul>
+<p>Either way, the crate should also be actively maintained (a release or
+commit within the last year), have <a href="https://docs.rs">docs.rs</a> documentation, and use a
+standard OSI license.</p>
 <!--
 Links, in a few categories. Follow the existing structure.
 Keep lines sorted.
